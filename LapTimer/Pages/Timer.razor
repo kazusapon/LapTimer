@@ -8,12 +8,12 @@
     <div class="container-fluid">
         <section>
             <div class="row">
-                <div class="col-sm-6">
-                    <h1 class="display-1">@TimerClock.ToString(@"hh\:mm\:ss\.ff")</h1>
+                <div class="col-sm-12 alert alert-secondary text-center p-0">
+                    <h1 class="display-1 m-0">@TimerClock.ToString(@"hh\:mm\:ss\.f")</h1>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-12 text-center">
                     <button type="button" class="btn btn-primary" @onclick="StartTimer" disabled="@timerButtonsState.TimerStartButtonDisabled">測定開始</button>
                     <button type="button" class="btn btn-danger" @onclick="StopTimer" disabled="@timerButtonsState.TimerStopButtonDisabled">停止</button>
                     <button type="button" class="btn btn-secondary" @onclick="ResetTimer" disabled="@timerButtonsState.TimerResetButtonDisabled">リセット</button>
@@ -42,14 +42,14 @@
 </div>
 
 @code {
-    private static TimeSpan TimerClock = new(0, 0, 0, 0, 0); // 表示用
-
-    private static TimeSpan AddTimeSpan = new(0, 0, 0, 0, 10); // 加算用
-
-    private System.Timers.Timer _timer = new System.Timers.Timer(1); // 1ms間隔
-
     [Inject]
     private TimerButtonsState timerButtonsState { get; set; }
+
+    private static TimeSpan TimerClock = new(0, 0, 0, 0, 0); // 表示用
+
+    private static TimeSpan AddTimeSpan = TimeSpan.FromMilliseconds(100); // 加算用
+
+    private System.Timers.Timer _timer = new System.Timers.Timer(100); // 1ms間隔
 
     protected override void OnInitialized()
     {
@@ -65,7 +65,7 @@
 
     private void StartTimer()
     {
-        _timer.Start();
+        _timer.Enabled = true;
         timerButtonsState.TimerStart();
     }
 
@@ -80,7 +80,7 @@
     private void ResetTimer()
     {
         _timer.Stop();
-        TimerClock = new TimeSpan(0, 0, 0, 0, 0);
+        TimerClock = new(0, 0, 0, 0, 0);
         timerButtonsState.TimerReset();
 
         RefreshView();
