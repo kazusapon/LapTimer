@@ -1,0 +1,48 @@
+﻿@using LapTimer.Data
+@page "/accelerate"
+
+<h3>加速度センサー</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>軸</th>
+            <th>加速度</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>X軸</td>
+            <td>@accelerometerWrapper.AccelerometerValue.Acceleration.X</td>
+        </tr>
+        <tr>
+            <td>Y軸</td>
+            <td>@accelerometerWrapper.AccelerometerValue.Acceleration.Y</td>
+        </tr>
+        <tr>
+            <td>Z軸</td>
+            <td>@accelerometerWrapper.AccelerometerValue.Acceleration.Z</td>
+        </tr>
+    </tbody>
+</table>
+
+@code {
+    [Inject]
+    private AccelerometerWrapper accelerometerWrapper { get; set; }
+
+    private System.Timers.Timer _timer = new System.Timers.Timer(100); // 100ms間隔
+
+    protected override void OnInitialized()
+    {
+        accelerometerWrapper.SensorStart();
+        _timer.Elapsed += (sendor, e) =>
+        {
+            InvokeAsync(() => StateHasChanged());
+        };
+        _timer.AutoReset = true;
+        _timer.Enabled = true;
+
+        base.OnInitialized();
+    }
+}

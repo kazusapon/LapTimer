@@ -23,6 +23,7 @@ public static class MauiProgram
 #endif
 
 		builder.Services.AddTransient<TimerButtonsState>()
+						.AddTransient<AccelerometerWrapper>()
 						.AddSingleton<WeatherForecastService>();
 
 		return builder.Build();
