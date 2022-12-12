@@ -1,4 +1,13 @@
 ﻿@using LapTimer.Data
+
+@using ChartJs.Blazor.ChartJS.LineChart
+@using ChartJs.Blazor.ChartJS.Common.Axes
+@using ChartJs.Blazor.ChartJS.Common.Axes.Ticks
+@using ChartJs.Blazor.ChartJS.Common.Time
+@using ChartJs.Blazor.ChartJS.Common.Enums
+@using ChartJs.Blazor.Charts
+@using ChartJs.Blazor.ChartJS.Common.Properties
+
 @page "/accelerate"
 
 <h3>加速度センサー</h3>
@@ -27,11 +36,12 @@
     </tbody>
 </table>
 
+
 @code {
     [Inject]
     private AccelerometerWrapper accelerometerWrapper { get; set; }
 
-    private System.Timers.Timer _timer = new System.Timers.Timer(100); // 100ms間隔
+    private System.Timers.Timer _timer = new System.Timers.Timer(500); // 500ms間隔
 
     protected override void OnInitialized()
     {

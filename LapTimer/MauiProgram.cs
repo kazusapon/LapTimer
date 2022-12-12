@@ -26,6 +26,6 @@ public static class MauiProgram
 						.AddTransient<AccelerometerWrapper>()
 						.AddSingleton<WeatherForecastService>();
 
-		return builder.Build();
+        return builder.Build();
 	}
 }
