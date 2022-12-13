@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using LapTimer.Data;
+using LapTimer.Servicies;
 
 namespace LapTimer;
 
@@ -24,7 +25,9 @@ public static class MauiProgram
 
 		builder.Services.AddTransient<TimerButtonsState>()
 						.AddTransient<AccelerometerWrapper>()
-						.AddSingleton<WeatherForecastService>();
+                        .AddTransient<AccelateViewModel>()
+                        .AddSingleton<WeatherForecastService>()
+						.AddSingleton<IDbService, DbService>();
 
         return builder.Build();
 	}

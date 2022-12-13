@@ -7,49 +7,47 @@ using System.Threading.Tasks;
 using Microsoft.Maui.Animations;
 using Microsoft.Maui.Devices.Sensors;
 
-namespace LapTimer.Data
+namespace LapTimer.Data;
+
+public class AccelerometerWrapper
 {
-    public class AccelerometerWrapper
+    public AccelerometerData AccelerometerValue { get; set; }
+
+    public AccelerometerWrapper()
     {
-        public AccelerometerData AccelerometerValue { get; set; }
+        SensorStop();
+    }
 
-        public AccelerometerWrapper()
+    public void SensorStart() 
+    {
+        if (IsUnMonitoring())
         {
-            SensorStop();
+            Accelerometer.Default.ReadingChanged += Accelerometer_ReadingChanged;
+            Accelerometer.Default.Start(SensorSpeed.UI);
         }
+    }
 
-        public void SensorStart() 
+    public void SensorStop()
+    {
+        if (IsMonitoring())
         {
-            if (IsUnMonitoring())
-            {
-                Accelerometer.Default.ReadingChanged += Accelerometer_ReadingChanged;
-                Accelerometer.Default.Start(SensorSpeed.UI);
-            }
+            Accelerometer.Default.Stop();
+            Accelerometer.Default.ReadingChanged -= Accelerometer_ReadingChanged;
         }
+    }
 
-        public void SensorStop()
-        {
-            if (IsMonitoring())
-            {
-                Accelerometer.Default.Stop();
-                Accelerometer.Default.ReadingChanged -= Accelerometer_ReadingChanged;
-            }
-        }
+    private void Accelerometer_ReadingChanged(object sender, AccelerometerChangedEventArgs e)
+    {
+        AccelerometerValue = e.Reading;
+    }
 
+    private bool IsMonitoring()
+    {
+        return Accelerometer.IsSupported && Accelerometer.IsMonitoring;
+    }
 
-        private void Accelerometer_ReadingChanged(object sender, AccelerometerChangedEventArgs e)
-        {
-            AccelerometerValue = e.Reading;
-        }
-
-        private bool IsMonitoring()
-        {
-            return Accelerometer.IsSupported && Accelerometer.IsMonitoring;
-        }
-
-        private bool IsUnMonitoring()
-        {
-            return Accelerometer.IsSupported && !Accelerometer.IsMonitoring;
-        }
+    private bool IsUnMonitoring()
+    {
+        return Accelerometer.IsSupported && !Accelerometer.IsMonitoring;
     }
 }

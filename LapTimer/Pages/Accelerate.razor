@@ -8,6 +8,8 @@
 @using ChartJs.Blazor.Charts
 @using ChartJs.Blazor.ChartJS.Common.Properties
 
+@using LapTimer.Models.Entities;
+
 @page "/accelerate"
 
 <h3>加速度センサー</h3>
@@ -27,7 +29,7 @@
         </tr>
         <tr>
             <td>Y軸</td>
-            <td>@accelerometerWrapper.AccelerometerValue.Acceleration.Y</td>
+            <td>@accelerometerWrapper.AccelerometerValue.Acceleration.Z</td>
         </tr>
         <tr>
             <td>Z軸</td>
@@ -37,9 +39,13 @@
 </table>
 
 
+
 @code {
     [Inject]
     private AccelerometerWrapper accelerometerWrapper { get; set; }
+
+    [Inject]
+    private AccelateViewModel accelateViewModel { get; set; }
 
     private System.Timers.Timer _timer = new System.Timers.Timer(500); // 500ms間隔
 
@@ -55,4 +61,18 @@
 
         base.OnInitialized();
     }
+
+    private async void CreateLoadTransfer()
+    {
+        var loadTransfer = new LoadTransfer()
+        {
+            AccelerateX = accelerometerWrapper.AccelerometerValue.Acceleration.X,
+            AccelerateY = accelerometerWrapper.AccelerometerValue.Acceleration.Y,
+            AccelerateZ = accelerometerWrapper.AccelerometerValue.Acceleration.Z,
+            LocationX = 0.0,
+            LocationY = 0.0
+        };
+
+        await accelateViewModel.CreateAsync(loadTransfer);
+    }   
 }
